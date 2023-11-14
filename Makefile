@@ -23,10 +23,10 @@ create-new-migration: # make create-new-migration name=file_name
 	migrate create -ext sql -dir migrations/postgres -seq $(name)
 
 mig-up:
-	goose -dir ./migrations/postgres postgres "user=husanmusa dbname=postgres sslmode=disable password=pass" up
+	goose -dir ./migrations/postgres postgres "user=postgres host=localhost dbname=postgres sslmode=disable password=pass" up
 
 mig-down:
-	goose -dir ./migrations/postgres postgres "user=husanmusa dbname=postgres sslmode=disable password=pass" down
+	goose -dir ./migrations/postgres postgres "user=postgres host=localhost dbname=postgres sslmode=disable password=pass" down
 
 build:
 	CGO_ENABLED=0 GOOS=linux go build -mod=vendor -a -installsuffix cgo -o ${CURRENT_DIR}/bin/${APP} ${APP_CMD_DIR}/main.go

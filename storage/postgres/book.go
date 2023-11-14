@@ -72,7 +72,7 @@ func (r *BookServiceRepo) GetBookList(ctx context.Context, req *pb.GetBookListRe
 		params["book_category_id"] = req.BookCategoryId
 	}
 
-	cQ := `select count(1) from doctor `
+	cQ := `select count(1) from book `
 	cQ, arr = helper.ReplaceQueryParams(cQ, params)
 	err := r.Db.QueryRow(ctx, cQ, arr...).Scan(
 		&count,

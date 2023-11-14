@@ -2,12 +2,10 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/husanmusa/book_pro_service/config"
 	pb "github.com/husanmusa/book_pro_service/genproto/book_pro_service"
 	"github.com/husanmusa/book_pro_service/service"
 	"github.com/husanmusa/book_pro_service/storage/postgres"
-	"log"
 	"net"
 
 	"github.com/saidamir98/udevs_pkg/logger"
@@ -28,12 +26,6 @@ func main() {
 		loggerLevel = logger.LevelDebug
 	default:
 		loggerLevel = logger.LevelInfo
-	}
-
-	lis, err := net.Listen("tcp", cfg.RPCPort)
-	if err != nil {
-		log.Panic("error while listen RPC", logger.Error(err))
-		return
 	}
 
 	log := logger.NewLogger(cfg.ServiceName, loggerLevel)
@@ -63,13 +55,18 @@ func main() {
 	pb.RegisterBookProServiceServer(s, bookService)
 	pb.RegisterBookCategoryServiceServer(s, bookCategoryService)
 
-	group, ctx := errgroup.WithContext(context.Background())
-	fmt.Println(ctx)
+	group, _ := errgroup.WithContext(context.Background())
 
 	group.Go(func() error {
-		err = s.Serve(lis)
+		lis, err := net.Listen("tcp", cfg.RPCPort)
 		if err != nil {
-			panic(err)
+			log.Panic("error while listen RPC", logger.Error(err))
+		}
+
+		log.Info("Api server has started", logger.String("port", cfg.RPCPort))
+
+		if err = s.Serve(lis); err != nil {
+			log.Panic("s.Serve(lis)", logger.Error(err))
 		}
 		log.Panic("Api server has finished")
 		return nil
@@ -79,4 +76,6 @@ func main() {
 	if err != nil {
 		log.Panic("error while listening: %v", logger.Error(err))
 	}
+
+	log.Info("Success")
 }

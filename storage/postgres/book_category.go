@@ -60,7 +60,7 @@ func (r *BookCategoryRepo) GetBookCategoryList(ctx context.Context, req *pb.GetB
 		params["limit"] = req.Limit
 	}
 
-	cQ := `select count(1) from doctor `
+	cQ := `select count(1) from book_category `
 	cQ, arr = helper.ReplaceQueryParams(cQ, params)
 	err := r.Db.QueryRow(ctx, cQ, arr...).Scan(
 		&count,
