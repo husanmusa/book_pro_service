@@ -43,13 +43,13 @@ func Load() Config {
 
 	config := Config{}
 
-	config.ServiceName = cast.ToString(getOrReturnDefaultValue("SERVICE_NAME", "appointment_service"))
+	config.ServiceName = cast.ToString(getOrReturnDefaultValue("SERVICE_NAME", "book_pro_service"))
 	config.Environment = cast.ToString(getOrReturnDefaultValue("ENVIRONMENT", DebugMode))
 	config.Version = cast.ToString(getOrReturnDefaultValue("VERSION", "1.0"))
 
 	config.PostgresHost = cast.ToString(getOrReturnDefaultValue("POSTGRES_HOST", "localhost"))
 	config.PostgresPort = cast.ToInt(getOrReturnDefaultValue("POSTGRES_PORT", 5432))
-	config.PostgresUser = cast.ToString(getOrReturnDefaultValue("POSTGRES_USER", "postgres"))
+	config.PostgresUser = cast.ToString(getOrReturnDefaultValue("POSTGRES_USER", "husanmusa"))
 	config.PostgresPassword = cast.ToString(getOrReturnDefaultValue("POSTGRES_PASSWORD", "pass"))
 	config.PostgresDatabase = cast.ToString(getOrReturnDefaultValue("POSTGRES_DATABASE", "postgres"))
 	config.RPCPort = cast.ToString(getOrReturnDefaultValue("RPC_PORT", ":8050"))

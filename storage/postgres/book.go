@@ -68,11 +68,11 @@ func (r *BookServiceRepo) GetBookList(ctx context.Context, req *pb.GetBookListRe
 	}
 
 	if len(req.BookCategoryId) > 0 {
-		filter += " and book_category_id = :book_category_id "
+		filter += " and b.book_category_id = :book_category_id "
 		params["book_category_id"] = req.BookCategoryId
 	}
 
-	cQ := `select count(1) from book `
+	cQ := `select count(1) from book as b left join book_category as bc on b.book_category_id = bc.id` + filter
 	cQ, arr = helper.ReplaceQueryParams(cQ, params)
 	err := r.Db.QueryRow(ctx, cQ, arr...).Scan(
 		&count,
@@ -88,10 +88,10 @@ func (r *BookServiceRepo) GetBookList(ctx context.Context, req *pb.GetBookListRe
 			b.pages,
 			b.description,
 			bc.name,
-			b.created_at
+			to_char(b.created_at, 'YYYY-MM-DD HH24:MI:SS') as created_at
 from book as b left join book_category as bc on b.book_category_id = bc.id ` + filter + order + offset + limit
-
 	q, arr = helper.ReplaceQueryParams(q, params)
+
 	rows, err := r.Db.Query(ctx, q, arr...)
 
 	if err != nil {
@@ -138,8 +138,8 @@ func (r *BookServiceRepo) GetBook(ctx context.Context, req *pb.ById) (*pb.Book, 
 			b.pages,
 			b.description,
 			bc.name,
-			b.created_at
-from book as b left join book_category as bc on b.book_category_id = bc.id where id = $1 `,
+			to_char(b.created_at, 'YYYY-MM-DD HH24:MI:SS') as created_at
+from book as b left join book_category as bc on b.book_category_id = bc.id where b.id = $1 `,
 		req.Id).Scan(
 		&book.Id,
 		&book.Name,

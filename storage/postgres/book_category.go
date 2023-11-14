@@ -48,7 +48,6 @@ func (r *BookCategoryRepo) GetBookCategoryList(ctx context.Context, req *pb.GetB
 	offset := ""
 	filter := " where true "
 	limit := "  "
-	order := " ORDER BY created_at DESC "
 
 	if req.Offset > 0 {
 		offset = " OFFSET :offset "
@@ -72,7 +71,7 @@ func (r *BookCategoryRepo) GetBookCategoryList(ctx context.Context, req *pb.GetB
 	q := `select 
 			id,
 			name
-			from book_category ` + filter + order + offset + limit
+			from book_category ` + filter + offset + limit
 
 	q, arr = helper.ReplaceQueryParams(q, params)
 	rows, err := r.Db.Query(ctx, q, arr...)
