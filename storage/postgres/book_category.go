@@ -124,8 +124,8 @@ from book_category where id = $1 `,
 }
 
 func (r *BookCategoryRepo) UpdateBookCategory(ctx context.Context, req *pb.BookCategory) error {
-	query := `update book set
-                name=$1,
+	query := `update book_category set
+                name=$1
               where id=$2 `
 
 	_, err := r.Db.Exec(ctx, query, req.Name, req.Id)

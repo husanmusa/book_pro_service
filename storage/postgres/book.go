@@ -53,7 +53,7 @@ func (r *BookServiceRepo) GetBookList(ctx context.Context, req *pb.GetBookListRe
 	)
 
 	offset := ""
-	filter := " where true "
+	filter := " where b.deleted_at = 0 "
 	limit := " LIMIT 10 "
 	order := " ORDER BY created_at DESC "
 
@@ -139,7 +139,7 @@ func (r *BookServiceRepo) GetBook(ctx context.Context, req *pb.ById) (*pb.Book, 
 			b.description,
 			bc.name,
 			to_char(b.created_at, 'YYYY-MM-DD HH24:MI:SS') as created_at
-from book as b left join book_category as bc on b.book_category_id = bc.id where b.id = $1 `,
+from book as b left join book_category as bc on b.book_category_id = bc.id where b.id = $1 and b.deleted_at = 0 `,
 		req.Id).Scan(
 		&book.Id,
 		&book.Name,

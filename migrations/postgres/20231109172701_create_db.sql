@@ -16,7 +16,7 @@ create table book
     book_category_id uuid references book_category (id),
     created_at       timestamp default now(),
     updated_at       timestamp default now(),
-    deleted_at       bigint
+    deleted_at       bigint default 0
 );
 
 -- +goose StatementEnd
